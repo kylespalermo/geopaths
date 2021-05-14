@@ -1,0 +1,137 @@
+body {
+    font-family: kaneda-gothic, sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    margin: 0;
+}
+
+h1 {
+    margin-top: 0;
+    margin-bottom: 18px;
+    font-size: 18px;
+}
+
+p {
+    text-indent: 1em;
+    margin-top: -.2em;
+    margin-bottom: .15em;
+    font-size: 18px;
+    line-height: .9em;
+}
+
+p:first-of-type {
+    text-indent: 0em;
+}
+
+.coordinatesList:first-of-type {
+    margin-top: 0;
+}
+
+a {
+    color: rgb(66, 82, 249);
+    text-decoration: none;
+}
+
+#wrapper {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: repeat(3, 1fr);
+    grid-gap: 1vh;
+    margin: 1vh;
+    height: 98vh;
+}
+
+#textCell {
+    grid-column: 2 / span 1;
+    grid-row: 1  / span 3;
+    max-height: 100%;
+    overflow: scroll;
+    -ms-overflow-style: none;  
+    scrollbar-width: none; 
+    font-size: 18px;
+}
+
+.coordinatesList {
+    margin-top: -.2em;
+    margin-bottom: -.2em;
+    padding: 0;
+}
+
+.metaDataImage {
+    width: 100%;
+}
+
+#textCell::-webkit-scrollbar {
+    display: none;
+}
+
+.observationsMap {
+    grid-row: 1 / span 2;
+    grid-column: 3 / span 4;
+    overflow: hidden;
+}
+    
+.observationsMap:nth-child(2) {
+    grid-row: 3;
+    grid-column: 5 / span 2;
+}
+
+svg {
+    background-color: rgb(227, 233, 53);
+}
+
+.obsLine {
+    stroke: rgb(66, 82, 249);
+    stroke-width: .2;
+    }
+
+.borderLine {
+    stroke: black;
+    stroke-width: 2;
+    opacity: .02;
+    }
+
+.species {
+    font-size: 18px;
+    color: black;
+}
+
+.attribution {
+    font-size: 13px;
+    color: black;
+}
+
+.dateLink {
+    font-size: 18px;
+    color: black;
+    margin-bottom: 18px;
+}
+
+circle {
+    fill: rgb(66, 82, 249);
+    opacity: .2;
+
+}
+
+.placeContainer {
+    grid-column: 3 / span 2;
+    grid-row: 3 / span 1;
+    font-size: 22px;
+    text-align: right;
+    color:rgb(255, 92, 57);
+    mix-blend-mode: multiply;
+}
+
+.satImage {
+    grid-column: 3 / span 2;
+    grid-row: 3 / span 1;
+    background-color:rgb(227, 233, 53);
+    background-blend-mode: multiply;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.siteDescription {
+    grid-row: 1 / span 3;
+    grid-column: 1 / span 1;
+}
