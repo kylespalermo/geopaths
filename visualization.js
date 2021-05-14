@@ -1,6 +1,6 @@
 let myKey;
 
-fetch("netlify/functions/api.js")
+fetch("netlify/functions/api")
 .then(response => console.log(response.json()))
 .then(json => {
     myKey = json.api;
