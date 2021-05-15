@@ -49,6 +49,7 @@ a {
     -ms-overflow-style: none;  
     scrollbar-width: none; 
     font-size: 18px;
+    padding-left: 4px;
 }
 
 .coordinatesList {
@@ -69,6 +70,7 @@ a {
     grid-row: 1 / span 2;
     grid-column: 3 / span 4;
     overflow: hidden;
+    background-color: rgb(32, 32, 28);
 }
     
 .observationsMap:nth-child(2) {
@@ -77,18 +79,17 @@ a {
 }
 
 svg {
-    background-color: rgb(227, 233, 53);
+    background-color: rgb(32, 32, 28);
 }
 
 .obsLine {
-    stroke: rgb(66, 82, 249);
+    /* stroke: rgb(66, 82, 249); */
     stroke-width: .2;
     }
 
 .borderLine {
-    stroke: black;
     stroke-width: 2;
-    opacity: .02;
+    opacity: .06;
     }
 
 .species {
@@ -108,9 +109,7 @@ svg {
 }
 
 circle {
-    fill: rgb(66, 82, 249);
     opacity: .2;
-
 }
 
 .placeContainer {
@@ -134,4 +133,11 @@ circle {
 .siteDescription {
     grid-row: 1 / span 3;
     grid-column: 1 / span 1;
+}
+
+#loadingNotification {
+    grid-column: 3 / span 2;
+    grid-row: 2;
+    text-align: center;
+    font-size: 18px;
 }

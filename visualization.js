@@ -1,5 +1,10 @@
 let myKey;
 
+var loadingNotification = document.createElement("div")
+loadingNotification.innerHTML = "fetching data"
+loadingNotification.setAttribute("id", "loadingNotification")
+document.getElementById("wrapper").appendChild(loadingNotification)
+
 fetch(".netlify/functions/api")
 .then(response => response.json())
 .then(json => {
@@ -8,6 +13,8 @@ fetch(".netlify/functions/api")
 
 var geoJsons = [];
 var firstRun = true;
+
+var gradientBase = Math.floor(Math.random()*360)
 
 var mapDataWrapper;
 var placeName = "string";
@@ -107,14 +114,14 @@ function sendRequest(){
             sendRequest();
             return;
             } else {
-            loadObservationData(results, attributesRequests, randNum)
+            loadObservationData(results, randNum)
             }      
             })
         .catch(console.error);
 }
 
 //push all of the results to our data wrapper
-function loadObservationData(results, attributeRequests, sourceCoordNum){
+function loadObservationData(results, sourceCoordNum){
     for (i in results) {
         var valuesWrapper = {};
         for (j in attributesRequests) {
@@ -207,6 +214,7 @@ function createSiteDescription(){
 function runD3(){
 
     //clear everything 
+    d3.select("#loadingNotification").remove()
     d3.select("#textCell").remove()
     d3.select(".satImage").remove()
     d3.selectAll(".observationsMap").remove()
@@ -228,7 +236,11 @@ function runD3(){
             .insert("svg")
                 .attr("class", "svgMain")
                 .attr("viewBox", "0 0 100 75")
-                .attr("id", function(d,i) {return `svg_${i}`})
+                .attr("id", function(d,i) {
+                    return `svg_${i}`
+                })
+
+        
     }
 
     var svgMain = d3.select("#svg_0")
@@ -236,7 +248,10 @@ function runD3(){
         .on("mouseleave", deleteCircles)
 
     var svgSmall = d3.select("#svg_1")
-        .on("click", shiftMaps)
+        .on("click", function(){
+            addLoadingImg();
+            shiftMaps();
+        })
 
     var newPath = d3.selectAll(".svgMain")
         .each(makeLine)
@@ -245,6 +260,9 @@ function runD3(){
     function makeLine(d,i) {
         var projection = d3.geoEquirectangular()
             .fitSize([100, 100], geoJsons[i].features[0])
+
+        var whichSVG = i;
+        makeGradient(i);
 
         d3.select(this)
             .selectAll("path")
@@ -256,10 +274,16 @@ function runD3(){
                         .projection(projection)
                     return geoGenerator(d);
                 })
-                .attr("class", function(d,i){if (i==0) {console.log("1stLine"); return "obsLine"} else {console.log("2ndLine"); return "borderLine"}})
+                .attr("class", function(d,i){if (i==0) {return "obsLine"} else {return "borderLine"}})
                 .attr("fill", "none")
+                .attr("stroke", function(d,i) {
+                    if (i == 0) {
+                        return `url(#gradient_${whichSVG})`
+                    } else {
+                        return "white"
+                    }
+                })
     }
-
 
     var textCell = d3.select("#wrapper")
         .append("div")
@@ -286,6 +310,7 @@ function runD3(){
             .data(geoJsons[0].features[0].geometry.coordinates)
                 .enter()
                 .append("circle")
+                .attr("fill", function(){return makeColor(gradientBase)})
                     .attr("cx", function(d) {
                         return projection([d[0], d[1]])[0];
                         })
@@ -360,6 +385,86 @@ function runD3(){
         textBox.style("color", "black")
         d3.select(".metaData").remove();
     }
+
+    function makeColor(hue) {
+        return d3.color(`hsl(${hue}, 94%, 61%)`)
+    }
+
+    function makeGradient(index){
+        console.log("ran makegradient" + index)
+        var gradientStop1 = makeColor(gradientBase);
+        var gradientStop2 = makeColor(gradientBase + 40);
+
+        var defs = d3.select(`#svg_${index}`).append("defs")
+        
+        var gradient = 
+            defs
+                // .selectAll("linearGradient")
+                // .data(graph.nodes)
+                // .enter()
+                .insert("linearGradient")
+                    .attr("id", `gradient_${index}`)
+                    .attr("x1", "0%")
+                    .attr("y1", "0%")
+                    .attr("x2", "100%")
+                    .attr("y2", "100%")
+
+        gradient.append("stop")
+            .attr("class", "start")
+            .attr("offset", "0%")
+            .attr("stop-color", gradientStop1)
+            .attr("stop-opacity", 1)
+
+        gradient.append("stop")
+            .attr("class", "end")
+            .attr("offset", "100%")
+            .attr("stop-color", gradientStop2)
+            .attr("stop-opacity", 1)
+
+        gradientBase += 40;
+
+    }
+
+    function addLoadingImg() {
+        var loadingGroup = d3.select("#svg_1").append("g")
+        
+        for (let i = 0; i < 3; i++) {
+        loadingGroup.append("circle")
+            .attr("id", `loadingCircle_${i}`)
+            .attr("fill", "#fff")
+            .attr("stroke", "none")
+            .attr("cx", function() {
+                if (i == 0) {
+                    return 50 - (5);
+                } else if (i == 1) {
+                    return 50 
+                } else if (i == 2) {
+                    return 50 + (5)
+                }
+            })
+            .attr("cy", 32.5)
+            .attr("r", 2)
+            .attr("fill", makeColor(gradientBase))
+            .style("opacity", 0)
+               
+    }
+
+    repeat();
+
+    function repeat(){
+        for (let i = 0; i < 3; i++) {
+        d3.select(`#loadingCircle_${i}`)
+        .transition()
+        .duration(500)
+        .delay(i * 200)
+        .style("opacity", 1)
+        .transition()
+        .style("opacity", 0)
+        .on("end", repeat)
+        }
+    }
+}
+
 
     //add our place name/image and populate the site description
     getPlaceName();
