@@ -14,7 +14,8 @@ fetch(".netlify/functions/api")
 var geoJsons = [];
 var firstRun = true;
 
-var gradientBase = Math.floor(Math.random()*360)
+var gradientBase = Math.floor(Math.random()*360);
+var gradientBaseHold;
 
 var mapDataWrapper;
 var placeName = "string";
@@ -143,7 +144,7 @@ function loadObservationData(results, sourceCoordNum){
 //retrieve the border coordinates on both sides the request source coordinate and load the GeoJsons' "border" objects
 //50 is a just a meaningless increment to hopefully ensure that the border line stretches across the entire SVG
 function loadBorderData(sourceCoordNum){
-for (let i = -50; i <= 50; i++) {
+for (let i = -100; i <= 100; i++) {
     var pushThis = sourceCoords[sourceCoordNum + i];
     //but only push if it isn't undefined; if it reaches too far back or too far forward in the list, just ignore
     if(pushThis) {
@@ -310,7 +311,7 @@ function runD3(){
             .data(geoJsons[0].features[0].geometry.coordinates)
                 .enter()
                 .append("circle")
-                .attr("fill", function(){return makeColor(gradientBase)})
+                .attr("fill", function(){return makeColor(gradientBaseHold)})
                     .attr("cx", function(d) {
                         return projection([d[0], d[1]])[0];
                         })
@@ -349,7 +350,7 @@ function runD3(){
     function highlightText(index){
         var metaData = geoJsons[0].features[0].properties.metadata[index]
         var textBox = d3.select(`#textbox_${metaData.id}`)
-        textBox.style("color", "rgb(66, 82, 249)")
+        textBox.style("color", makeColor(gradientBaseHold))
         document.getElementById(`textbox_${metaData.id}`).scrollIntoView();
     }
 
@@ -364,7 +365,7 @@ function runD3(){
     function appendMetaData(index){
         var metaData = geoJsons[0].features[0].properties.metadata[index]
         var textBox = d3.select(`#textbox_${metaData.id}`)
-        textBox.style("color", "rgb(66, 82, 249)")
+        textBox.style("color", makeColor(gradientBaseHold))
         textBox
             .append("div")
             .attr("class", "metaData")
@@ -395,13 +396,13 @@ function runD3(){
         var gradientStop1 = makeColor(gradientBase);
         var gradientStop2 = makeColor(gradientBase + 40);
 
+        if (index == 0) {gradientBaseHold = gradientBase}
+        document.querySelector(':root').style.setProperty("--gradientBase", makeColor(gradientBaseHold));
+
         var defs = d3.select(`#svg_${index}`).append("defs")
         
         var gradient = 
             defs
-                // .selectAll("linearGradient")
-                // .data(graph.nodes)
-                // .enter()
                 .insert("linearGradient")
                     .attr("id", `gradient_${index}`)
                     .attr("x1", "0%")
