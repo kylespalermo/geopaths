@@ -12,13 +12,13 @@ h1 {
     font-weight: 700;
     font-style: normal;
     margin-top: 0;
-    margin-bottom: 18px;
+    margin-bottom: 12px;
     font-size: 24px;
 }
 
 p {
     font-family: aktiv-grotesk-extended, sans-serif;
-    text-indent: 1em;
+    text-indent: 2em;
     margin-top: -.2em;
     margin-bottom: .15em;
     font-size: 12px;
@@ -32,7 +32,8 @@ p:first-of-type {
 }
 
 .coordinatesList:first-of-type {
-    margin-top: 0;
+    margin-top: 6px;
+    /* line-height: 24px; */
 }
 
 a {
