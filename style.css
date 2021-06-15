@@ -17,11 +17,11 @@ h1 {
 }
 
 p {
-    font-family: aktiv-grotesk-extended, sans-serif;
+    font-family: aktiv-grotesk, sans-serif;
     text-indent: 2em;
     margin-top: -.2em;
     margin-bottom: .15em;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 400;
     line-height: 1.1em;
     hyphens: auto;
