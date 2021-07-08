@@ -260,7 +260,7 @@ function runD3(){
     //draw geopaths using request data
     function makeLine(d,i) {
         var projection = d3.geoEquirectangular()
-            .fitSize([100, 100], geoJsons[i].features[0])
+            .fitSize([70, 70], geoJsons[i].features[0])
 
         var whichSVG = i;
         makeGradient(i);
@@ -305,7 +305,7 @@ function runD3(){
         var hoveredSVG = d3.select(this)
 
         var projection = d3.geoEquirectangular()
-            .fitSize([100, 100], geoJsons[0].features[0])
+            .fitSize([70, 70], geoJsons[0].features[0])
 
         hoveredSVG.selectAll("circle")
             .data(geoJsons[0].features[0].geometry.coordinates)
