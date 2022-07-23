@@ -181,19 +181,19 @@ function getPlaceImage(){
 function getPlaceName(){
 
     var placeRequestCoords = currentCoords[0][1] + "," + currentCoords[0][0];
-    console.log(placeRequestCoords)
+    // console.log(placeRequestCoords)
 
     var placeNameURL = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${placeRequestCoords}&result_type=political&key=${myKey}`
-    console.log(placeNameURL)
+    // console.log(placeNameURL)
     var placeNameRequest = new Request(placeNameURL);
 
     fetch(placeNameRequest)
         .then(response => response.json())
         .then(data => {
         var results = data.results
-        console.log(data)
+        // console.log(data)
         placeName = results[0].formatted_address
-        console.log(placeName)
+        // console.log(placeName)
         var placeContainer = document.createElement("div")
         placeContainer.setAttribute("class", "placeContainer")
         placeContainer.innerHTML = placeName;
@@ -392,7 +392,7 @@ function runD3(){
     }
 
     function makeGradient(index){
-        console.log("ran makegradient" + index)
+        // console.log("ran makegradient" + index)
         var gradientStop1 = makeColor(gradientBase);
         var gradientStop2 = makeColor(gradientBase + 40);
 
